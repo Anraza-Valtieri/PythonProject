@@ -13,9 +13,6 @@ from collections import defaultdict
 from collections import OrderedDict
 from array import *
 
-##########################################
-### GOT TO RENAME THESE VARIABLES SOON ###
-##########################################
 merchantsales = {} #This stores MERCH ID and Number of sales in Dict format
 receiptvalue = {} #This stores receipt ID and Value in Dict format
 receiptids = [] #Receipt IDs in a list
@@ -25,7 +22,6 @@ sortedmerchantDict = {} #Sorted merchantDict
 
 root = Tk()
 displayBox = Listbox(root)
-tBox = Text(root, state='disabled',width=550, height=600,wrap='none')
 '''
 Display box is a global, use the below 2 lines to update its value i.e. change your print to below
 displayBox.delete(0, END)
@@ -46,7 +42,6 @@ class ApplicationMain(Frame):
         displayBox.pack(fill=X,padx=20,pady=30)
         displayBox.yview()
         
-        #tBox.insert('1.0', "TESTTESTTESTTESTTESTTESTTEST")
         btn1 = Button(root, text='Load CSV', command=self.readCSV)
         btn1.pack(fill=X,padx=50,pady=5,ipady=15)
         btn2 = Button(root, text='Export to File', command=self.exportDataToFile)
