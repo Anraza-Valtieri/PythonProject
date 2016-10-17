@@ -77,14 +77,20 @@ class ApplicationMain(Frame):
         self.subMenu.add_command(label = "Find Association", command = self.findAssociationindata) # Function 7 findAssociationindata
 
     def clearAll(self): 
-        '''This ensures a clean state so we don't carry over old data.
+        '''
+        This ensures a clean state so we don't carry over old data.
+        - Jerry
         '''
         receiptids[:] = []
         receiptvalue.clear()
         merchantsales.clear()
     
     def updateDisplaybox(self, cleanscreen, text): 
-        '''Updates the Display box - A true in Cleanscreen empties the displayBox. text is basically the string you want to print 
+        '''
+        Updates the Display box :
+        A true in Cleanscreen empties the displayBox. 
+        Text is basically the string you want to print
+        - Jerry 
         '''
         if cleanscreen == True:
             displayBox.delete(0, END)
@@ -102,6 +108,12 @@ class ApplicationMain(Frame):
 
 
     def readCSV(self):
+        ''' 
+        This is the primary function of the program. Takes the CSV files and reads it line by line.
+        from there we store and sort the data out into different list and dict types for our needs.
+        This function can be runned more than one to update the data within.
+        - Jerry
+        '''
         self.clearAll() # Ensure Clean state
         self.file_opt = options = {}
         options['filetypes'] = [('csv files', '.csv')] #Basically restricts to .csv files
@@ -118,13 +130,11 @@ class ApplicationMain(Frame):
                 else: # create a new array in this slot
                     receiptvalue[row[0]] = [row[1]] #Record receipt data in Dict with slot receipt ID
 
-                    #-------IMPORTANT TO ADD TO MAIN CODE---------
                     #Build dictionary where Keys=Merchant Name, Data=ID
                     if row[1] in merchantDict: #If Merch name exist in dict add the receipt id
                         merchantDict[row[1]].append(row[0])
                     else: # If Merch name does not exist, new array with the first item row[0]
                         merchantDict[row[1]] = [row[0]]
-                    #---------------------------------------------
 
                     if row[1] in merchantsales: #If Merch name exist in dict
                         merchantsales[row[1]] += 1; #INC. number
@@ -153,8 +163,9 @@ class ApplicationMain(Frame):
             print "%s: %s" %(key, merchantsales[key])
         '''
         ### DEBUGGING LINES ### 
+
     def makeDirectory(self,path):
-        ''' Creates Directory safely
+        ''' Creates Directory safely - Jerry
         '''
         try: 
             os.makedirs(path)
@@ -165,26 +176,30 @@ class ApplicationMain(Frame):
                 raise
 
     def safeopenPath(self,path):
-        ''' Open "path" for writing, creating any parent directories as needed.
+        ''' Open "path" for writing, creating any parent directories as needed. 
+        - Jerry
         '''
         self.makeDirectory(os.path.dirname(path))
         return open(path, 'w')
     
 
     def writetoFile(self, path, data):
-        ''' This Function should be used to create files into the disk with data written into it.
-        example will be writetoFile(Path of file with .type at the end, stringofData)
+        ''' 
+        This Function should be used to create files into the disk with data written into it.
+        example will be writetoFile(Path of file with .type at the end, stringofData) 
+        - Jerry
         '''
         with self.safeopenPath(path) as output_file: #Begin write process
             output_file.write(str(data)+"\n")
 
     def exportDataToFile(self): ## Exports read data into files by receipt ID
-        ''' This function causes the program to export all stored receipt in memory to an output file based on receiptids
-            IDs. No extra data required. This function is I/O Heavy, use sparingly'''
+        ''' 
+        This function causes the program to export all stored receipt in memory to an output file based on receiptids
+        IDs. No extra data required. This function is I/O Heavy, use sparingly 
+        - Jerry
+        '''
         if not receiptvalue:
             print "receiptvalue is empty"
-            #displayBox.delete(0, END)
-            #displayBox.insert(END, 'ERROR in Receiptvalue - Have you loaded CSV data?')
             self.updateDisplaybox(True, 'ERROR in Receiptvalue - Have you loaded CSV data?')
             return False
 
@@ -205,7 +220,7 @@ class ApplicationMain(Frame):
         towriteData = "" # Ensure Clean state
 
     def extractFloat(self, data): #Extracts Numbers from string - self.extractFloat(string)
-        '''
+        ''' Jerry -
         This function causes the program to extract numbers from given data, returning it.
         Normally used to extract a number from a row of receipt data but can be used for alot more.
 
@@ -227,7 +242,10 @@ class ApplicationMain(Frame):
         
 
     def matchWords(self, data1, data2): #
-        '''Checks for data1, in LIST data2 - self.matchWords("Word", list)
+        '''
+        Checks for data1, in LIST data2 
+        usage: self.matchWords("Word", list) 
+        - Jerry
         '''
         if data1 in data2:
             return True
@@ -235,7 +253,9 @@ class ApplicationMain(Frame):
             return False
 
     def totalSales(self): 
-        '''# Get Total sales from data
+        '''
+        Get Total sales from data 
+        - Jerry
         '''
         if not receiptvalue:
             print "receiptvalue is empty"
@@ -268,6 +288,8 @@ class ApplicationMain(Frame):
         
 
     def listTotalReceipts(self):
+        ''' Jerry
+        '''
         if not merchantsales:
             print "merchantsales is empty"
             self.updateDisplaybox(True, 'Error: merchantsales is empty - Have you loaded CSV data?')
@@ -282,18 +304,7 @@ class ApplicationMain(Frame):
 
 
     def listAllSoldItems(self):
-        ''' Templates
-        Chin Wan Logic PTE LTD
-        ---------------------
-        (ITEMS)
-        ---------------------
-
-        COQ SEAFOOD
-        ===================
-        (OTHERS)
-        ===================
-        (ITEMS)
-        -------------------
+        '''
         '''
         if not receiptvalue:
             print "receiptvalue is empty"
