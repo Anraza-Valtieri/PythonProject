@@ -1,0 +1,18 @@
+Chin Wan Logic PTE LTD
+10 UBI CRESCENT, #04-07
+UBI TECHPARK, SINGAPORE 408564
+=====================================
+05/07/2016 08:30  T001     201603301
+ORDER:       C002956
+Cashier: 001
+--------------------------------------
+10     Beer                      30.00
+1      Carrot Cake                2.50
+1      Chocolate Cake             3.50
+----------------------------------
+TOTAL       36.00
+CASH                         36.00
+CHANGE         0.00
+====================================
+Thank You and
+See You Again!
