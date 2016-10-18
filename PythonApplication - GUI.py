@@ -2,6 +2,7 @@
 ###
 ###
 from Tkinter import *
+import tkMessageBox
 import tkFileDialog
 import csv
 import sys
@@ -21,7 +22,9 @@ merchantDict = {} #Dictionary where Keys=Merchant Name, Data=ID
 sortedmerchantDict = {} #Sorted merchantDict
 
 root = Tk()
-displayBox = Listbox(root)
+labelvar = StringVar()
+displayBox = Text(root,wrap=WORD,height=15)
+selectedMerc = StringVar(root)
 '''
 Display box is a global, use the below 2 lines to update its value i.e. change your print to below
 displayBox.delete(0, END)
@@ -36,28 +39,54 @@ class ApplicationMain(Frame):
         
 
     def createWidgets(self): #Create Widgets
-        frame = Frame(root)
-        frame.pack()
-        
-        displayBox.pack(fill=X,padx=20,pady=30)
-        displayBox.yview()
-        btn1 = Button(root, text='Load CSV', command=self.readCSV)
-        btn1.pack(fill=X,padx=50,pady=5,ipady=15)
-        btn2 = Button(root, text='Export to File', command=self.exportDataToFile)
-        btn2.pack(fill=X,padx=50,pady=5,ipady=5)
-        btn3 = Button(root, text='List Total Receipt by Merchant', command=self.listTotalReceipts)
-        btn3.pack(fill=X,padx=50,pady=5,ipady=5)
-        btn4 = Button(root, text='Total Sales', command=self.totalSales)
-        btn4.pack(fill=X,padx=50,pady=5,ipady=5)
-        btn5 = Button(root, text='All Items Sold', command=self.listAllSoldItems)
-        btn5.pack(fill=X,padx=50,pady=5,ipady=5)
-        btn6 = Button(root, text='Export to CSV', command=self.exportCSV)
-        btn6.pack(fill=X,padx=50,pady=5,ipady=5)
-        btn7 = Button(root, text='Find Association & Show Recommendation', command=self.findAssociationindata)
-        btn7.pack(fill=X,padx=50,pady=5,ipady=5)
-        btn8 = Button(root, text='Log Sheet', command=self.logSheet)
-        btn8.pack(fill=X,padx=50,pady=5,ipady=5)
+        row1 = Frame(root)
+        row1.pack(fill=X)
 
+        btn1 = Button(row1, text='Load CSV', command=self.readCSV)
+        btn1.pack(side=LEFT,padx=30,pady=5,ipadx=60,ipady=10)
+
+        labelvar.set("No CSV Loaded")
+        labelTop = Label( row1, textvariable=labelvar)
+        labelTop.pack(side=LEFT)
+
+        displayBox.pack(fill=X,padx=20,pady=20)
+        displayBox.yview()
+        
+        row2 = Frame(root)
+        row2.pack(fill=X)
+        btn2 = Button(row2, text='Export to File\n', command=self.exportDataToFile, height=4, width=35)
+        btn2.pack(side=LEFT,padx=30,pady=10)
+        btn3 = Button(row2, text='List Total Receipt\n by Merchant', command=self.listTotalReceipts, height=4, width=35)
+        btn3.pack(side=LEFT)
+
+        row3 = Frame(root)
+        row3.pack(fill=X)
+        btn4 = Button(row3, text='Total Sales\n', command=self.totalSales, height=4, width=35)
+        btn4.pack(side=LEFT,padx=30,pady=10)
+        btn5 = Button(row3, text='All Items Sold\n', command=self.listAllSoldItems, height=4, width=35)
+        btn5.pack(side=LEFT)
+
+        row4 = Frame(root)
+        row4.pack(fill=X)
+        btn6 = Button(row4, text='Export to CSV', command=self.exportCSV, height=4, width=35)
+        btn6.pack(side=LEFT,padx=30,pady=10)
+        btn7 = Button(row4, text='Log Sheet', command=self.logSheet, height=4, width=35)
+        btn7.pack(side=LEFT)
+
+
+        row5 = Frame(root)
+        row5.pack(fill=X)
+
+        mercList = ['Chin Wan Logic PTE LTD', 'COQ SEAFOOD']
+        selectedMerc.set('Chin Wan Logic PTE LTD')
+        option1 = OptionMenu(row5, selectedMerc, *mercList)
+        option1.pack(side=LEFT,padx=30)
+        option1.configure(height=2,width=50)
+        
+        btn8 = Button(row5, text='Find Associations & \nRecommendations', command=self.findMercAssoc, height=4, width=20)
+        btn8.pack(side=LEFT,pady=20)
+        
+        
         top = self.winfo_toplevel()
         self.menuBar = Menu(top) # Create Top menu bar
         top["menu"] = self.menuBar
@@ -88,10 +117,11 @@ class ApplicationMain(Frame):
         Text is basically the string you want to print
         - Jerry 
         '''
-        if cleanscreen == True:
-            displayBox.delete(0, END)
-        textOut = textwrap.fill(text, 20)
-        displayBox.insert(END, textOut)
+        if cleanscreen:
+            displayBox.delete(0.0, END)
+        
+        if text != "":
+            displayBox.insert(END, text)
 
     def sortDict(self):
         '''Clean Up data for MerchID''' 
@@ -147,7 +177,7 @@ class ApplicationMain(Frame):
 
             self.sortDict()
             f.close()  
-        
+            labelvar.set(csvfile_dir[csvfile_dir.rfind("/")+1:]+" loaded")
             self.updateDisplaybox(True, 'CSV read successfully!')
         ### DEBUGGING LINES ###  
         '''
@@ -304,7 +334,7 @@ class ApplicationMain(Frame):
         self.updateDisplaybox(True, 'Number of Total receipt by Merchants:')
         for key in sorted(merchantsales):
             print "%s: %s" %(key, merchantsales[key])
-            self.updateDisplaybox(False, "%s: %s" %(key, merchantsales[key]))
+            self.updateDisplaybox(False, "\n%s: %s" %(key, merchantsales[key]))
 
 
     def listAllSoldItems(self):
@@ -358,10 +388,10 @@ class ApplicationMain(Frame):
         print "The items sold in %s are %s." %(Merchantname2, solditem2)
         
         self.updateDisplaybox(True, "The items sold in %s are :" %(Merchantname1))
-        self.updateDisplaybox(False, "%s." %(solditem1))
-        self.updateDisplaybox(False, " ")
-        self.updateDisplaybox(False, "The items sold in %s are :" %(Merchantname2))
-        self.updateDisplaybox(False, "%s." %(solditem2))
+        self.updateDisplaybox(False, "\n%s." %(solditem1))
+        self.updateDisplaybox(False, "\n")
+        self.updateDisplaybox(False, "\nThe items sold in %s are :" %(Merchantname2))
+        self.updateDisplaybox(False, "\n%s." %(solditem2))
 
 
     def findAssociations(self, merchant,itemLine,endString,dataDict):
@@ -427,26 +457,26 @@ class ApplicationMain(Frame):
         elif  0.5 <= (correlation/anchorProductCount) <= 0.8:
             promoBudget = subCount*corIncrease1*breakEvenDate
             promoAmount = promoBudget/promoDuration/subCount*100
-            self.updateDisplaybox(False, "Assuming 30%s of customers who buy %s also decide to buy %s during the promotion period, an estimated increase of %0.1f%s is expected in the correlation, profits will be made after %s days" %('%',anchorProduct, relatedProduct, corIncrease1*100,'%', breakEvenDate))
             print "Assuming 30%s of customers who buy %s also decide to buy %s during the promotion period, an estimated increase of %0.1f%s is expected in the correlation, profits will be made after %s days" %('%',anchorProduct, relatedProduct, corIncrease1*100,'%', breakEvenDate)
-            self.updateDisplaybox(False, "Recommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct))
             print "Recommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct)
+            self.updateDisplaybox(False, "Assuming 30%s of customers who buy %s also decide to buy %s during the promotion period, an estimated increase of %0.1f%s is expected in the correlation, profits will be made after %s days" %('%',anchorProduct, relatedProduct, corIncrease1*100,'%', breakEvenDate))
+            self.updateDisplaybox(False, "\nRecommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct))
+            
         elif  0.2 <= (correlation/anchorProductCount) < 0.5:
             promoBudget = subCount*corIncrease2*breakEvenDate
             promoAmount = promoBudget/promoDuration/subCount*100
-            self.updateDisplaybox(False, "Assuming 30%s of customers who buy %s also decide to buy %s during the promotion period, an estimated increase of %0.1f%s is expected in the correlation, profits will be made after %s days" %('%',anchorProduct, relatedProduct, corIncrease2*100,'%', breakEvenDate))
             print "Assuming 30%s of customers who buy %s also decide to buy %s during the promotion period, an estimated increase of %0.1f%s is expected in the correlation, profits will be made after %s days" %('%',anchorProduct, relatedProduct, corIncrease2*100,'%', breakEvenDate)
             print "Recommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct)
-            self.updateDisplaybox(False, "Recommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct))
+            self.updateDisplaybox(False, "Assuming 30%s of customers who buy %s also decide to buy %s during the promotion period, an estimated increase of %0.1f%s is expected in the correlation, profits will be made after %s days" %('%',anchorProduct, relatedProduct, corIncrease2*100,'%', breakEvenDate))  
+            self.updateDisplaybox(False, "\nRecommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct))
       
         elif  0 <= (correlation/anchorProductCount) < 0.2:
             promoBudget = subCount*corIncrease3*breakEvenDate
             promoAmount = promoBudget/promoDuration/subCount*100
             print "Assuming 30%s of customers who buy %s also decide to buy %s during the promotion period, an estimated increase of %0.1f%s is expected in the correlation, profits will be made after %s days" %('%',anchorProduct, relatedProduct, corIncrease3*100,'%', breakEvenDate)
-            self.updateDisplaybox(False, "Assuming 30%s of customers who buy %s also decide to buy %s during the promotion period, an estimated increase of %0.1f%s is expected in the correlation, profits will be made after %s days" %('%',anchorProduct, relatedProduct, corIncrease3*100,'%', breakEvenDate))
             print  "Recommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct)
-            self.updateDisplaybox(False, "Recommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct))
-
+            self.updateDisplaybox(False, "Assuming 30%s of customers who buy %s also decide to buy %s during the promotion period, an estimated increase of %0.1f%s is expected in the correlation, profits will be made after %s days" %('%',anchorProduct, relatedProduct, corIncrease3*100,'%', breakEvenDate))
+            self.updateDisplaybox(False, "\nRecommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct))
 
     def findAssociationindata(self):
         if not sortedmerchantDict:
@@ -552,7 +582,8 @@ class ApplicationMain(Frame):
             self.updateDisplaybox(True, 'ERROR in Receiptvalue - Have you loaded CSV data?')
             return False
 
-        displayBox.delete(0, END)
+        #displayBox.delete(0.0, END)
+        self.updateDisplaybox(True, '')
         for merchant in sortedmerchantDict:
             if merchant == "COQ SEAFOOD":
                 print ""
@@ -601,10 +632,82 @@ class ApplicationMain(Frame):
                     print "COMPANY NOT RECOGNIZED"
                     self.updateDisplaybox(False, "COMPANY NOT RECOGNIZED")
 
+    def findMercAssoc(self):
+        if not sortedmerchantDict:
+            print "sortedmerchantDict is empty"
+            self.updateDisplaybox(True, 'ERROR: sortedmerchantDict empty - Have you loaded CSV data?')
+            return False
+
+        
+        if selectedMerc.get()=="Chin Wan Logic PTE LTD":
+            retList = self.findAssociations("Chin Wan Logic PTE LTD",8,'----------------------------------',sortedmerchantDict)
+        else:
+            retList = self.findAssociations("COQ SEAFOOD",11,'----------------------------------',sortedmerchantDict)
+            
+        combiDict = retList[0]
+        singleDict = retList[1]
+
+        assocText = '============ Using Apriori Association Algorithm ============'
+        assocText +='\n{0:30} {1}     Database Size:{2}'.format('ITEM-SET','SUPPORT',merchantsales[selectedMerc.get()])
+
+        for item in singleDict:
+            if singleDict[item]>2:
+                assocText +='\n{0:30} {1}'.format(item,str(singleDict[item]))
+        for item in combiDict:
+            if combiDict[item]>2:
+                assocText +='\n{0:30} {1}'.format(item,str(combiDict[item]))
+            
+        assocText +='\nItem-set size limited to 2 due to small size of dataset'
+        assocText +='\nMin support is 3, item-sets with less are not shown'
+        assocText +='\nPlease select a pair using the dropdown list to see recommendation'
+        self.updateDisplaybox(True, assocText)
+        
+        def paFunction():
+            if var1.get()==var2.get():
+                self.updateDisplaybox(True, 'ERROR - You have selected the same item twice')
+                return False
+            
+            sf = "Find associations and show recommendations"
+            root.title(sf)
+
+            total = merchantsales[selectedMerc.get()] #total no. of receipts for current merchant
+            x = singleDict[var1.get()] #occurences of x
+            xy = combiDict[(var1.get()+", "+var2.get())] #occurences of xANDy
+            support = round(float(xy)/float(total)*100,1) #percent xy/total aka support
+            confidence = round(float(xy)/float(x)*100,1) #percent xy/x aka Confidence
+            
+            assocText = '============ Selected: %s, %s ============' % (var1.get(),var2.get())
+            assocText +='\nSupport (How frequently the item-set appears in the database):\n '+str(xy)+'/'+str(total)+' (~'+str(support)+'%)'
+            assocText +='\nConfidence (How often the rule has been found to be true):\n '+str(xy)+'/'+str(x)+' (~'+str(confidence)+'%)\n\n'
+            
+            self.updateDisplaybox(True, assocText)
+            print assocText
+            
+            self.promoAdviser(var1.get(),var2.get(),singleDict[var1.get()],combiDict[(var1.get()+", "+var2.get())])
+
+        root = Tk()
+        root.geometry("500x100")
+        root.title("Option Window")
+        var1 = StringVar(root)
+        var1.set(singleDict.keys()[0])
+ 
+        firstList = singleDict.keys() #Sets the menu options to the keys in singledict aka the items
+        option1 = OptionMenu(root, var1, *firstList)
+        option1.pack(side='left', padx=10, pady=10)
+ 
+        var2 = StringVar(root)
+        var2.set(singleDict.keys()[1])
+        secondList = singleDict.keys() 
+        option2 = OptionMenu(root, var2, *secondList)
+        option2.pack(side='left', padx=10, pady=10)
+ 
+        button = Button(root, text="GO", command=paFunction,height=3,width=15)
+        button.pack(side='left', padx=10, pady=10)
+        root.mainloop()
 
 app = ApplicationMain()
-app.master.title("test") #Title is set here
-app.master.geometry("600x650")
+app.master.title("Main Window") #Title is set here
+app.master.geometry("800x700")
 app.master.resizable(0,0)
 app.mainloop()
 
