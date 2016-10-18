@@ -121,7 +121,7 @@ class ApplicationMain(Frame):
             displayBox.delete(0.0, END)
         
         if text != "":
-            displayBox.insert(END, text)
+            displayBox.insert(END, text+"\n")
 
     def sortDict(self):
         '''Clean Up data for MerchID''' 
@@ -234,7 +234,7 @@ class ApplicationMain(Frame):
         '''
         if not receiptvalue:
             print "receiptvalue is empty"
-            self.updateDisplaybox(True, 'ERROR in Receiptvalue - Have you loaded CSV data?')
+            self.updateDisplaybox(True, 'ERROR: Receiptvalue is empty - Have you loaded CSV data?')
             return False
 
         towriteData = "" #String data to be written
@@ -293,7 +293,7 @@ class ApplicationMain(Frame):
         '''
         if not receiptvalue:
             print "receiptvalue is empty"
-            self.updateDisplaybox(True, 'ERROR in Receiptvalue - Have you loaded CSV data?')
+            self.updateDisplaybox(True, 'ERROR: Receiptvalue is empty - Have you loaded CSV data?')
             return False
 
         tempdata = []
@@ -326,7 +326,7 @@ class ApplicationMain(Frame):
         '''
         if not merchantsales:
             print "merchantsales is empty"
-            self.updateDisplaybox(True, 'Error: merchantsales is empty - Have you loaded CSV data?')
+            self.updateDisplaybox(True, 'ERROR: merchantsales is empty - Have you loaded CSV data?')
             return False
 
         #print "storedata3 sorted"
@@ -334,7 +334,7 @@ class ApplicationMain(Frame):
         self.updateDisplaybox(True, 'Number of Total receipt by Merchants:')
         for key in sorted(merchantsales):
             print "%s: %s" %(key, merchantsales[key])
-            self.updateDisplaybox(False, "\n%s: %s" %(key, merchantsales[key]))
+            self.updateDisplaybox(False, "%s: %s" %(key, merchantsales[key]))
 
 
     def listAllSoldItems(self):
@@ -342,7 +342,7 @@ class ApplicationMain(Frame):
         '''
         if not receiptvalue:
             print "receiptvalue is empty"
-            self.updateDisplaybox(True, 'ERROR in Receiptvalue - Have you loaded CSV data?')
+            self.updateDisplaybox(True, 'ERROR: Receiptvalue is empty - Have you loaded CSV data?')
             return False
             
         itemlist1 = []
@@ -388,10 +388,10 @@ class ApplicationMain(Frame):
         print "The items sold in %s are %s." %(Merchantname2, solditem2)
         
         self.updateDisplaybox(True, "The items sold in %s are :" %(Merchantname1))
-        self.updateDisplaybox(False, "\n%s." %(solditem1))
-        self.updateDisplaybox(False, "\n")
-        self.updateDisplaybox(False, "\nThe items sold in %s are :" %(Merchantname2))
-        self.updateDisplaybox(False, "\n%s." %(solditem2))
+        self.updateDisplaybox(False, "%s." %(solditem1))
+        self.updateDisplaybox(False, "")
+        self.updateDisplaybox(False, "The items sold in %s are :" %(Merchantname2))
+        self.updateDisplaybox(False, "%s." %(solditem2))
 
 
     def findAssociations(self, merchant,itemLine,endString,dataDict):
@@ -460,7 +460,7 @@ class ApplicationMain(Frame):
             print "Assuming 30%s of customers who buy %s also decide to buy %s during the promotion period, an estimated increase of %0.1f%s is expected in the correlation, profits will be made after %s days" %('%',anchorProduct, relatedProduct, corIncrease1*100,'%', breakEvenDate)
             print "Recommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct)
             self.updateDisplaybox(False, "Assuming 30%s of customers who buy %s also decide to buy %s during the promotion period, an estimated increase of %0.1f%s is expected in the correlation, profits will be made after %s days" %('%',anchorProduct, relatedProduct, corIncrease1*100,'%', breakEvenDate))
-            self.updateDisplaybox(False, "\nRecommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct))
+            self.updateDisplaybox(False, "Recommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct))
             
         elif  0.2 <= (correlation/anchorProductCount) < 0.5:
             promoBudget = subCount*corIncrease2*breakEvenDate
@@ -468,7 +468,7 @@ class ApplicationMain(Frame):
             print "Assuming 30%s of customers who buy %s also decide to buy %s during the promotion period, an estimated increase of %0.1f%s is expected in the correlation, profits will be made after %s days" %('%',anchorProduct, relatedProduct, corIncrease2*100,'%', breakEvenDate)
             print "Recommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct)
             self.updateDisplaybox(False, "Assuming 30%s of customers who buy %s also decide to buy %s during the promotion period, an estimated increase of %0.1f%s is expected in the correlation, profits will be made after %s days" %('%',anchorProduct, relatedProduct, corIncrease2*100,'%', breakEvenDate))  
-            self.updateDisplaybox(False, "\nRecommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct))
+            self.updateDisplaybox(False, "Recommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct))
       
         elif  0 <= (correlation/anchorProductCount) < 0.2:
             promoBudget = subCount*corIncrease3*breakEvenDate
@@ -476,12 +476,12 @@ class ApplicationMain(Frame):
             print "Assuming 30%s of customers who buy %s also decide to buy %s during the promotion period, an estimated increase of %0.1f%s is expected in the correlation, profits will be made after %s days" %('%',anchorProduct, relatedProduct, corIncrease3*100,'%', breakEvenDate)
             print  "Recommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct)
             self.updateDisplaybox(False, "Assuming 30%s of customers who buy %s also decide to buy %s during the promotion period, an estimated increase of %0.1f%s is expected in the correlation, profits will be made after %s days" %('%',anchorProduct, relatedProduct, corIncrease3*100,'%', breakEvenDate))
-            self.updateDisplaybox(False, "\nRecommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct))
+            self.updateDisplaybox(False, "Recommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct))
 
     def findAssociationindata(self):
         if not sortedmerchantDict:
             print "sortedmerchantDict is empty"
-            self.updateDisplaybox(True, 'ERROR in sortedmerchantDict - Have you loaded CSV data?')
+            self.updateDisplaybox(True, 'ERROR: sortedmerchantDict is empty - Have you loaded CSV data?')
             return False
 
         #retList = self.findAssociations("COQ SEAFOOD",11,'----------------------------------',sortedmerchantDict)
@@ -491,8 +491,8 @@ class ApplicationMain(Frame):
         self.updateDisplaybox(True,"Finding Association within data..")
         for item in singleDict:
             
-            print '\n====== %s: %s total ======' % (item,str(singleDict[item]))
-            self.updateDisplaybox(False,'\n====== %s: %s total ======' % (item,str(singleDict[item])))
+            print '====== %s: %s total ======' % (item,str(singleDict[item]))
+            self.updateDisplaybox(False,'====== %s: %s total ======' % (item,str(singleDict[item])))
             for i in [key for key, value in combiDict.items() if str(item).lower() in key.lower()]:
 
                 relation = i.split(',')
@@ -507,7 +507,7 @@ class ApplicationMain(Frame):
     def exportCSV(self):
         if not receiptvalue:
             print "receiptvalue is empty"
-            self.updateDisplaybox(True, 'ERROR in Receiptvalue - Have you loaded CSV data?')
+            self.updateDisplaybox(True, 'ERROR: Receiptvalue is empty - Have you loaded CSV data?')
             return False
 
         #Begin creating/rewriting file named 'csvOutput.csv'
@@ -579,7 +579,7 @@ class ApplicationMain(Frame):
     def logSheet(self):
         if not receiptvalue:
             print "receiptvalue is empty"
-            self.updateDisplaybox(True, 'ERROR in Receiptvalue - Have you loaded CSV data?')
+            self.updateDisplaybox(True, 'ERROR: Receiptvalue is empty - Have you loaded CSV data?')
             return False
 
         #displayBox.delete(0.0, END)
@@ -589,16 +589,16 @@ class ApplicationMain(Frame):
                 print ""
                 print "COQ SEAFOOD"
                 print "DATE       TIME  WAITER CASHIER"
-                displayBox.insert(END, "COQ SEAFOOD")
-                displayBox.insert(END, "DATE       TIME  WAITER CASHIER")
+                self.updateDisplaybox(False, "COQ SEAFOOD")
+                self.updateDisplaybox(False, "DATE       TIME  WAITER CASHIER")
                 
     
             elif merchant == "Chin Wan Logic PTE LTD":
                 print ""
                 print "Chin Wan Logic PTE LTD"
                 print "DATE       TIME  WAITER CASHIER"
-                displayBox.insert(END, "Chin Wan Logic PTE LTD")
-                displayBox.insert(END, "DATE       TIME  WAITER CASHIER")
+                self.updateDisplaybox(False, "Chin Wan Logic PTE LTD")
+                self.updateDisplaybox(False, "DATE       TIME  WAITER CASHIER")
     
             for receiptsList in sortedmerchantDict[merchant]:
                 logSheet = ""
@@ -635,7 +635,7 @@ class ApplicationMain(Frame):
     def findMercAssoc(self):
         if not sortedmerchantDict:
             print "sortedmerchantDict is empty"
-            self.updateDisplaybox(True, 'ERROR: sortedmerchantDict empty - Have you loaded CSV data?')
+            self.updateDisplaybox(True, 'ERROR: sortedmerchantDict is empty - Have you loaded CSV data?')
             return False
 
         
@@ -707,7 +707,16 @@ class ApplicationMain(Frame):
 
 app = ApplicationMain()
 app.master.title("Main Window") #Title is set here
-app.master.geometry("800x700")
+from sys import platform as _platform
+if _platform == "linux" or _platform == "linux2":
+   # linux
+   app.master.geometry("600x750") # windows
+elif _platform == "darwin":
+   # MAC OS X
+   app.master.geometry("800x700") # Mac
+elif _platform == "win32":
+   # Windows
+   app.master.geometry("600x750") # windows
 app.master.resizable(0,0)
 app.mainloop()
 
