@@ -25,6 +25,9 @@ root = Tk()
 labelvar = StringVar()
 displayBox = Text(root,wrap=WORD,height=15)
 selectedMerc = StringVar(root)
+selectedOp = StringVar(root)
+dropdownOptions = {}
+
 '''
 Display box is a global, use the below 2 lines to update its value i.e. change your print to below
 displayBox.delete(0, END)
@@ -52,26 +55,46 @@ class ApplicationMain(Frame):
         displayBox.pack(fill=X,padx=20,pady=20)
         displayBox.yview()
         
-        row2 = Frame(root)
-        row2.pack(fill=X)
-        btn2 = Button(row2, text='Export to File\n', command=self.exportDataToFile, height=4, width=35)
-        btn2.pack(side=LEFT,padx=30,pady=10)
-        btn3 = Button(row2, text='List Total Receipt\n by Merchant', command=self.listTotalReceipts, height=4, width=35)
-        btn3.pack(side=LEFT)
+        _platform = sys.platform
+        if _platform == "linux" or _platform == "linux2":
+            # linux
+            print "Linux"
+        elif _platform == "darwin":
+            # MAC OS X
+            print "MacOS"
 
-        row3 = Frame(root)
-        row3.pack(fill=X)
-        btn4 = Button(row3, text='Total Sales\n', command=self.totalSales, height=4, width=35)
-        btn4.pack(side=LEFT,padx=30,pady=10)
-        btn5 = Button(row3, text='All Items Sold\n', command=self.listAllSoldItems, height=4, width=35)
-        btn5.pack(side=LEFT)
+            row6 = Frame(root)
+            row6.pack(fill=X)
+            opList = ['Export to File', 'List Total Receipt by Merchant', 'Total Sales', 'All Items sold','Export to CSV','Log sheet']
+            selectedOp.set('Select Operation')
+            optionMac = OptionMenu(row6, selectedOp, *opList)
+            optionMac.pack(side=LEFT,padx=30)
+            optionMac.configure(height=2,width=50)
 
-        row4 = Frame(root)
-        row4.pack(fill=X)
-        btn6 = Button(row4, text='Export to CSV', command=self.exportCSV, height=4, width=35)
-        btn6.pack(side=LEFT,padx=30,pady=10)
-        btn7 = Button(row4, text='Log Sheet', command=self.logSheet, height=4, width=35)
-        btn7.pack(side=LEFT)
+            btn9 = Button(row6, text='Execute', command=self.findSelectedOperation, height=4, width=20)
+            btn9.pack(side=LEFT,pady=20)
+        elif _platform == "win32":
+            # Windows
+            row2 = Frame(root)
+            row2.pack(fill=X)
+            btn2 = Button(row2, text='Export to File\n', command=self.exportDataToFile, height=4, width=35)
+            btn2.pack(side=LEFT,padx=30,pady=10)
+            btn3 = Button(row2, text='List Total Receipt\n by Merchant', command=self.listTotalReceipts, height=4, width=35)
+            btn3.pack(side=LEFT)
+
+            row3 = Frame(root)
+            row3.pack(fill=X)
+            btn4 = Button(row3, text='Total Sales\n', command=self.totalSales, height=4, width=35)
+            btn4.pack(side=LEFT,padx=30,pady=10)
+            btn5 = Button(row3, text='All Items Sold\n', command=self.listAllSoldItems, height=4, width=35)
+            btn5.pack(side=LEFT)
+
+            row4 = Frame(root)
+            row4.pack(fill=X)
+            btn6 = Button(row4, text='Export to CSV', command=self.exportCSV, height=4, width=35)
+            btn6.pack(side=LEFT,padx=30,pady=10)
+            btn7 = Button(row4, text='Log Sheet', command=self.logSheet, height=4, width=35)
+            btn7.pack(side=LEFT)
 
 
         row5 = Frame(root)
@@ -82,6 +105,7 @@ class ApplicationMain(Frame):
         option1 = OptionMenu(row5, selectedMerc, *mercList)
         option1.pack(side=LEFT,padx=30)
         option1.configure(height=2,width=50)
+
         
         btn8 = Button(row5, text='Find Associations & \nRecommendations', command=self.findMercAssoc, height=4, width=20)
         btn8.pack(side=LEFT,pady=20)
@@ -632,6 +656,30 @@ class ApplicationMain(Frame):
                     print "COMPANY NOT RECOGNIZED"
                     self.updateDisplaybox(False, "COMPANY NOT RECOGNIZED")
 
+    def findSelectedOperation(self):
+        '''
+        This Function is specifically designed for MacOS, as buttons do not scale the way we want, we have
+        to design new ways instead of using buttons - Jerry
+        '''
+        
+        if selectedOp.get() == "Export to File":
+            self.exportDataToFile()
+        elif selectedOp.get() == "List Total Receipt by Merchant":
+            self.listTotalReceipts()
+        elif selectedOp.get() == "Total Sales":
+            self.totalSales()
+        elif selectedOp.get() == "All Items sold":
+            self.listAllSoldItems()
+        elif selectedOp.get() == "Export to CSV":
+            self.exportCSV()
+        elif selectedOp.get() == "Log sheet":
+            self.logSheet()
+        else:
+            print "Operation not selcted"
+            self.updateDisplaybox(True, 'ERROR: Select operation in drop down menu first.')
+            return False
+
+
     def findMercAssoc(self):
         if not sortedmerchantDict:
             print "sortedmerchantDict is empty"
@@ -686,8 +734,9 @@ class ApplicationMain(Frame):
             self.promoAdviser(var1.get(),var2.get(),singleDict[var1.get()],combiDict[(var1.get()+", "+var2.get())])
 
         root = Tk()
-        root.geometry("500x100")
+        root.geometry("500x150")
         root.title("Option Window")
+        root.resizable(0,0)
         var1 = StringVar(root)
         var1.set(singleDict.keys()[0])
  
@@ -707,16 +756,17 @@ class ApplicationMain(Frame):
 
 app = ApplicationMain()
 app.master.title("Main Window") #Title is set here
-from sys import platform as _platform
+_platform = sys.platform
 if _platform == "linux" or _platform == "linux2":
    # linux
    app.master.geometry("600x750") # windows
 elif _platform == "darwin":
    # MAC OS X
-   app.master.geometry("800x700") # Mac
+   app.master.geometry("780x600") # Mac
 elif _platform == "win32":
    # Windows
    app.master.geometry("600x750") # windows
+
 app.master.resizable(0,0)
 app.mainloop()
 
