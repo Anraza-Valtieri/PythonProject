@@ -41,7 +41,6 @@ class ApplicationMain(Frame):
         
         displayBox.pack(fill=X,padx=20,pady=30)
         displayBox.yview()
-        
         btn1 = Button(root, text='Load CSV', command=self.readCSV)
         btn1.pack(fill=X,padx=50,pady=5,ipady=15)
         btn2 = Button(root, text='Export to File', command=self.exportDataToFile)
@@ -69,7 +68,9 @@ class ApplicationMain(Frame):
         self.subMenu.add_command(label = "List Total Receipt by Merchant",command = self.listTotalReceipts) # FUNCTION 3
         self.subMenu.add_command(label = "Total Sales", command = self.totalSales) # Function 4
         self.subMenu.add_command(label = "All Items Sold", command = self.listAllSoldItems) # Function 5
-        self.subMenu.add_command(label = "Find Association", command = self.findAssociationindata) # Function 7 findAssociationindata
+        self.subMenu.add_command(label = "Export data to CSV", command = self.exportCSV) # Function 6 exportCSV
+        self.subMenu.add_command(label = "Find Association & Recommendation", command = self.findAssociationindata) # Function 7 findAssociationindata
+        self.subMenu.add_command(label = "Log Sheet", command = self.logSheet) # Function ?
 
     def clearAll(self): 
         '''
@@ -107,6 +108,14 @@ class ApplicationMain(Frame):
         This is the primary function of the program. Takes the CSV files and reads it line by line.
         from there we store and sort the data out into different list and dict types for our needs.
         This function can be runned more than one to update the data within.
+
+        updated list/dict
+        merchantsales = {} #This stores MERCH ID and Number of sales in Dict format
+        receiptvalue = {} #This stores receipt ID and Value in Dict format
+        receiptids = [] #Receipt IDs in a list
+        #receiptDict = {} #Dictionary where Keys=ID, Data=Receipt
+        merchantDict = {} #Dictionary where Keys=Merchant Name, Data=ID
+        sortedmerchantDict = {} #Sorted merchantDict
         - Jerry
         '''
         self.clearAll() # Ensure Clean state
