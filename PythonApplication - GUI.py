@@ -7,11 +7,7 @@ import tkFileDialog
 import csv
 import sys
 import itertools
-import textwrap
 import os
-from collections import Counter
-from collections import defaultdict
-from collections import OrderedDict
 from array import *
 
 merchantsales = {} #This stores MERCH ID and Number of sales in Dict format
