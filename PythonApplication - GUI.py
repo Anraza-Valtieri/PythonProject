@@ -3,7 +3,6 @@ import itertools #To obtain permutations in our 'findAssociations' function
 import os #To export data in new '.csv'
  
 from Tkinter import * #GUI
-import tkMessageBox #GUI
 import tkFileDialog #GUI
 import sys #GUI
  
@@ -33,7 +32,7 @@ class ApplicationMain(Frame):
         Frame.__init__(self,master)
         self.grid()
         self.createWidgets()
-         
+        
  
     def createWidgets(self): #Create Widgets
         row1 = Frame(root)
