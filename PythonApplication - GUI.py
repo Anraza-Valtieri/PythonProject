@@ -421,8 +421,6 @@ class ApplicationMain(Frame):
             return False
  
         #Begin creating/rewriting file named 'csvOutput.csv'
-        #tempFile = open('csvOutput.csv', 'w')
-        #tempFile.close()
         with open('csvOutput.csv', 'w') as csvfile:
             writer = csv.writer(csvfile, delimiter=',')
             writer.writerow(['Receipt ID','Name','Address','Date','Time','Items','Amount','Cost','Total'])
