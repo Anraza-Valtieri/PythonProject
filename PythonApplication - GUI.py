@@ -303,7 +303,7 @@ class ApplicationMain(Frame):
  
  
     def listTotalReceipts(self): #-------------- | FUNCTION 3 | --------------#
-        ''' Jerry
+        ''' Lacus
         '''
         if not merchantsales:
             print "merchantsales is empty"
@@ -355,7 +355,7 @@ class ApplicationMain(Frame):
  
  
     def listAllSoldItems(self): #-------------- | FUNCTION 5 | --------------#
-        '''
+        ''' Dylan & Jun Loong
         '''
         if not receiptvalue:
             print "receiptvalue is empty"
@@ -413,6 +413,8 @@ class ApplicationMain(Frame):
  
  
     def exportCSV(self): #-------------- | FUNCTION 6 | --------------#
+    '''Dylan & Jun Loong
+    '''
         if not receiptvalue:
             print "receiptvalue is empty"
             self.updateDisplaybox(True, 'ERROR: Receiptvalue is empty - Have you loaded CSV data?')
@@ -485,6 +487,8 @@ class ApplicationMain(Frame):
         self.updateDisplaybox(True,"Exported CSV")
  
     def findAssociations(self, merchant,itemLine,endString,dataDict): #-------------- | FUNCTION 7 | --------------#
+    ''' Daniel
+    '''
         itemList= []
         singleDict = {}
         combiDict = {}
@@ -530,6 +534,8 @@ class ApplicationMain(Frame):
         return [combiDict,singleDict]
  
     def promoAdviser(self, anchorProduct,relatedProduct,anchorProductCount,correlation): #Data types should be as follows (str,str,float,float)
+        ''' Daniel
+        '''
         corIncrease1 = 0.05 #Estimates for the increase for each case
         corIncrease2 = 0.20
         corIncrease3 = 0.25
