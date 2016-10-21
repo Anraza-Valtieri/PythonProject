@@ -149,7 +149,7 @@ class ApplicationMain(Frame):
                 else:
                     sortedmerchantDict[mercId] = [receiptvalue[data]]
  
-    def readCSV(self): #-------------- | FUNCTION 1 | --------------#
+    def readCSV(self): #-------------- | FUNCTION 1 | --------------# DONE BY JERAHMEEL
         ''' 
         This is the primary function of the program. Takes the CSV files and reads it line by line.
         from there we store and sort the data out into different list and dict types for our needs.
@@ -243,7 +243,7 @@ class ApplicationMain(Frame):
  
  
  
-    def exportDataToFile(self): #-------------- | FUNCTION 2 | --------------#
+    def exportDataToFile(self): #-------------- | FUNCTION 2 | --------------# DONE BY JERAHMEEL
         ''' 
         This function causes the program to export all stored receipt in memory to an output file based on receiptids
         IDs. No extra data required. This function is I/O Heavy, use sparingly 
@@ -303,7 +303,11 @@ class ApplicationMain(Frame):
  
  
     def listTotalReceipts(self): #-------------- | FUNCTION 3 | --------------#
-        ''' Lacus
+        '''
+        As merchantsales has already been compiled during our 'readCSV' function,
+        we simply use as 'if' statement to validate if a file has been read and if so,
+        use a for loop to print it in order accordingly.
+        - Lucas
         '''
         if not merchantsales:
             print "merchantsales is empty"
@@ -362,50 +366,50 @@ class ApplicationMain(Frame):
             self.updateDisplaybox(True, 'ERROR: Receiptvalue is empty - Have you loaded CSV data?')
             return False
              
-        itemlist1 = []
-        itemlist2 = []
-        dict = {}
-        endString = '----------------------------------'
-        for merchantname in sortedmerchantDict:
-            for receiptdata in sortedmerchantDict[merchantname]:
-                if merchantname == 'COQ SEAFOOD': # COQ Seafood
-                    linestart = 10
+        itemlist1 = [] # Assign empty list to variable itemlist1 for storing sold items from merchant "COQ SEAFOOD".
+        itemlist2 = [] # Assign empty list to variable itemlist2 for storing sold items from merchant "Chin Wan Logic PTE LTD".
+        dict = {} # Create empty dictionary.
+        endString = '----------------------------------' # Search parameter assigned to variable endString.
+        for merchantname in sortedmerchantDict: 
+            for receiptdata in sortedmerchantDict[merchantname]: 
+                if merchantname == 'COQ SEAFOOD': # if condition to check which merchantname the for loop has iterated to.
+                    linestart = 10 # preset parameter analysed from csv file.
                     count = 0
                     while count == 0:
-                        if receiptdata[linestart] != endString:
+                        if receiptdata[linestart] != endString: # condition set to pattern analysed from csv file where data which needs to be extracted is between linestart and endString.
                             extractline = receiptdata[linestart]
-                            extractline = extractline[3:32].strip()
+                            extractline = extractline[3:32].strip() # strip line of data so that only the item name is left.
                             itemlist1.append(extractline)
                         else:
-                            count = 1
+                            count = 1 # exit loop.
  
                         linestart += 1
-                else:
-                    linestart = 8
+                else: # merchantname == "Chin Wan Logic PTE LTD".
+                    linestart = 8 # preset parameter analysed from csv file.
                     count = 0
                     while count == 0:
-                        if receiptdata[linestart] != endString:
+                        if receiptdata[linestart] != endString: # condition set to pattern analysed from csv file where data which needs to be extracted is between linestart and endString.
                             extractline2 = receiptdata[linestart]
-                            extractline2 = extractline2[3:32].strip()
+                            extractline2 = extractline2[3:32].strip() # strip line of data so that only the item name is left.
                             itemlist2.append(extractline2)
                         else:
-                            count = 1
+                            count = 1 # exit loop.
  
                         linestart += 1
-        setlist2 = set(itemlist2)
-        newlist2 = list(setlist2)
- 
-        Merchantname1 = sortedmerchantDict.keys()[0]
+
+        setlist2 = set(itemlist2) # Convert itemlist2 into a set to remove multiple repeated values.
+        newlist2 = list(setlist2) # Convert setlist2 back into a list to get a list with unique values.
+        Merchantname1 = sortedmerchantDict.keys()[0] # Assign merchant names to variables.
         Merchantname2 = sortedmerchantDict.keys()[1]
-        dict[Merchantname1] = [n for n in newlist2]
+        dict[Merchantname1] = [n for n in newlist2] # Create dictionary where each value in list is assigned to merchant name as key.
         dict[Merchantname2] = [n for n in itemlist1]
-        solditem1 = " and ".join([",".join(str(n) for n in dict[Merchantname1][0:-1]), dict[Merchantname1][-1]])
-        solditem2 = " and ".join([",".join(str(n) for n in dict[Merchantname2][0:-1]), dict[Merchantname2][-1]])
+        solditem1 = " and ".join([",".join(str(n) for n in dict[Merchantname1][0:-1]), dict[Merchantname1][-1]]) # convert each value in dict[Merchantname1] from range 0 to -1 to string and join them with ",". The last value in dict[Merchantname1] is then joined to the previous string with "and".
+        solditem2 = " and ".join([",".join(str(n) for n in dict[Merchantname2][0:-1]), dict[Merchantname2][-1]]) # convert each value in dict[Merchantname2] from range 0 to -1 to string and join them with ",". The last value in dict[Merchantname2] is then joined to the previous string with "and".
         print "The items sold in %s are %s.\n" %(Merchantname1, solditem1)
         print "The items sold in %s are %s." %(Merchantname2, solditem2)
          
         self.updateDisplaybox(True, "The items sold in %s are :" %(Merchantname1))
-        self.updateDisplaybox(False, "%s." %(solditem1))
+        self.updateDisplaybox(False, "%s.\n" %(solditem1))
         self.updateDisplaybox(False, "")
         self.updateDisplaybox(False, "The items sold in %s are :" %(Merchantname2))
         self.updateDisplaybox(False, "%s." %(solditem2))
@@ -413,8 +417,8 @@ class ApplicationMain(Frame):
  
  
     def exportCSV(self): #-------------- | FUNCTION 6 | --------------#
-    '''Dylan & Jun Loong
-    '''
+        '''Dylan & Jun Loong
+        '''
         if not receiptvalue:
             print "receiptvalue is empty"
             self.updateDisplaybox(True, 'ERROR: Receiptvalue is empty - Have you loaded CSV data?')
@@ -485,8 +489,8 @@ class ApplicationMain(Frame):
         self.updateDisplaybox(True,"Exported CSV")
  
     def findAssociations(self, merchant,itemLine,endString,dataDict): #-------------- | FUNCTION 7 | --------------#
-    ''' Daniel
-    '''
+        ''' Daniel
+        '''
         itemList= []
         singleDict = {}
         combiDict = {}
@@ -532,7 +536,10 @@ class ApplicationMain(Frame):
         return [combiDict,singleDict]
  
     def promoAdviser(self, anchorProduct,relatedProduct,anchorProductCount,correlation): #Data types should be as follows (str,str,float,float)
-        ''' Daniel
+        '''
+        Using the correlation found in Function 7, we parse our values through four pre-defined scenarios to
+        estimate based on certain assumptions what an appropriate promotion would be for the merchant.
+        - Lucas & Daniel
         '''
         corIncrease1 = 0.05 #Estimates for the increase for each case
         corIncrease2 = 0.20
@@ -600,6 +607,11 @@ class ApplicationMain(Frame):
  
  
     def logSheet(self): #-------------- | FUNCTION 8 | --------------#
+        '''
+        Furthering the use of our data, a logsheet would allow the merchants to see which cashier/waiter was working at what time.
+        This would have anti-fraud and dispute handling applications as it would be clear if a cashier/waiter was making transactions when it was not their shift etc. 
+        - Lucas
+        '''
         if not receiptvalue:
             print "receiptvalue is empty"
             self.updateDisplaybox(True, 'ERROR: Receiptvalue is empty - Have you loaded CSV data?')
@@ -625,29 +637,29 @@ class ApplicationMain(Frame):
      
             for receiptsList in sortedmerchantDict[merchant]:
                 logSheet = ""
-                if merchant == "COQ SEAFOOD":
+                if merchant == "COQ SEAFOOD": #If it is COQ SEAFOOD, the format to obtain the relevant information would be as follows
                     lineNum = [7,8]
                     for line in lineNum:
-                        timeStamp = receiptsList[line]
+                        timeStamp = receiptsList[line] #Grab the date
                         if line == 7:
-                            logSheet += timeStamp[0:16].strip()
+                            logSheet += timeStamp[0:16].strip() #Grab the time
                             logSheet += " "
                         elif line == 8:
-                            logSheet += timeStamp[19:24].strip()
+                            logSheet += timeStamp[19:24].strip() #Grab the waiter
                             logSheet += "  "                  
                     logSheet += "N/A"
                     print logSheet
                     self.updateDisplaybox(False, logSheet)
      
-                elif merchant == "Chin Wan Logic PTE LTD":
+                elif merchant == "Chin Wan Logic PTE LTD": #If it is Chin Wan Logic, the format to obtain the relevant information would be as follows
                     lineNum = [0,4,6]
                     for line in lineNum:
-                        timeStamp = receiptsList[line]
+                        timeStamp = receiptsList[line] #Grab the date
                         if line == 4:
-                            logSheet += timeStamp[0:16].strip()
+                            logSheet += timeStamp[0:16].strip() #Grab the time
                             logSheet += " N/A    "
                         elif line == 6:
-                            logSheet += timeStamp[9:12].strip()                   
+                            logSheet += timeStamp[9:12].strip() #Grab the cashier                   
                     print logSheet
                     self.updateDisplaybox(False, logSheet)
                      
@@ -680,6 +692,12 @@ class ApplicationMain(Frame):
  
  
     def findMercAssoc(self): #-------------- | FUNCTION 7&8 | --------------#
+        '''
+        Combining our Function 7 together with an application to interpret the correlations,
+        this function allows the user to select a merchant, after which they are able to select from two dropdown lists
+        which two products they would like to compare.
+        - Daniel & Lucas
+        '''
         if not sortedmerchantDict:
             print "sortedmerchantDict is empty"
             self.updateDisplaybox(True, 'ERROR: sortedmerchantDict is empty - Have you loaded CSV data?')
