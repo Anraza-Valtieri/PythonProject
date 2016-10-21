@@ -371,7 +371,7 @@ class ApplicationMain(Frame):
         itemlist2 = [] # Assign empty list to variable itemlist2 for storing sold items from merchant "Chin Wan Logic PTE LTD".
         dict = {} # Create empty dictionary.
         endString = '----------------------------------' # Search parameter assigned to variable endString.
-        for merchantname in sortedmerchantDict: 
+        for merchantname in sortedmerchantDict.keys(): 
             for receiptdata in sortedmerchantDict[merchantname]: 
                 if merchantname == 'COQ SEAFOOD': # if condition to check which merchantname the for loop has iterated to.
                     linestart = 10 # preset parameter analysed from csv file.
