@@ -1,3 +1,4 @@
+
 import csv #Read/Write .csv
 import itertools #To obtain permutations in our 'findAssociations' function
 import os #To export data in new '.csv'
@@ -110,13 +111,13 @@ class ApplicationMain(Frame):
         self.subMenu = Menu(self.menuBar) #Sub menu in Menu button
         self.menuBar.add_cascade(label = "Load CSV", menu = self.subMenu)  #File
         self.subMenu.add_command(label = "Open",command = self.readCSV)  #Read data
-        self.subMenu.add_command(label = "Export to File",command = self.exportDataToFile) # FUNCTION 2
-        self.subMenu.add_command(label = "List Total Receipt by Merchant",command = self.listTotalReceipts) # FUNCTION 3
+        self.subMenu.add_command(label = "Export to File",command = self.exportDataToFile) # Function 2
+        self.subMenu.add_command(label = "List Total Receipt by Merchant",command = self.listTotalReceipts) # Function 3
         self.subMenu.add_command(label = "Total Sales", command = self.totalSales) # Function 4
         self.subMenu.add_command(label = "All Items Sold", command = self.listAllSoldItems) # Function 5
         self.subMenu.add_command(label = "Export data to CSV", command = self.exportCSV) # Function 6 exportCSV
-        self.subMenu.add_command(label = "Find Association & Recommendation", command = self.findAssociationindata) # Function 7 findAssociationindata
-        self.subMenu.add_command(label = "Log Sheet", command = self.logSheet) # Function ?
+        self.subMenu.add_command(label = "Find Association & Recommendation", command = self.findMercAssoc) # Function 7 findMercAssoc
+        self.subMenu.add_command(label = "Log Sheet", command = self.logSheet) # Function 8
  
     def clearAll(self): 
         '''
@@ -488,8 +489,14 @@ class ApplicationMain(Frame):
         print "Created csvOutput.csv!"
         self.updateDisplaybox(True,"Exported CSV")
  
-    def findAssociations(self, merchant,itemLine,endString,dataDict): #-------------- | FUNCTION 7 | --------------#
+    def findAssociations(self, merchant,itemLine,endString,dataDict): #-------------- | FUNCTION 7 | --------------# DONE BY DANIEL
         ''' Daniel
+        This function is basically a customised receipt reader. It was developed to cope with the different receipt formats in our
+        sample data its arguments accept the item line number and end string for a given receipt. For example, in COQ SEAFOOD's
+        format, the items start at line 11 and the end string is ----------------------------------. It uses string operations
+        in a loop to slice only the item name. The items are stored in 2 separate dictionaries, one for single items and one
+        more for each paired item-set. This function returns both dictionaries.
+        
         '''
         itemList= []
         singleDict = {}
@@ -578,35 +585,9 @@ class ApplicationMain(Frame):
             print  "Recommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct)
             self.updateDisplaybox(False, "Assuming 30%s of customers who buy %s also decide to buy %s during the promotion period, an estimated increase of %0.1f%s is expected in the correlation, profits will be made after %s days" %('%',anchorProduct, relatedProduct, corIncrease3*100,'%', breakEvenDate))
             self.updateDisplaybox(False, "Recommended promotion is: Buy one %s at %0.2f%s off with any purchase of %s!" %(relatedProduct,promoAmount,'%',anchorProduct))
+
  
-    def findAssociationindata(self): #-------------- | FUNCTION 7&8 | --------------#
-        if not sortedmerchantDict:
-            print "sortedmerchantDict is empty"
-            self.updateDisplaybox(True, 'ERROR: sortedmerchantDict is empty - Have you loaded CSV data?')
-            return False
- 
-        #retList = self.findAssociations("COQ SEAFOOD",11,'----------------------------------',sortedmerchantDict)
-        retList = self.findAssociations("Chin Wan Logic PTE LTD",8,'----------------------------------',sortedmerchantDict)
-        combiDict = retList[0]
-        singleDict = retList[1]
-        self.updateDisplaybox(True,"Finding Association within data..")
-        for item in singleDict:
-             
-            print '====== %s: %s total ======' % (item,str(singleDict[item]))
-            self.updateDisplaybox(False,'====== %s: %s total ======' % (item,str(singleDict[item])))
-            for i in [key for key, value in combiDict.items() if str(item).lower() in key.lower()]:
- 
-                relation = i.split(',')
-                if relation[0]==item:
-                    percent = round(float(combiDict[i])/float(singleDict[item])*100,1)
-                    print i+': '+str(combiDict[i])+' (~'+str(percent)+'%)'
-                    displayBox.insert(END, i+': '+str(combiDict[i])+' (~'+str(percent)+'%)')
- 
-                    self.promoAdviser(relation[0],relation[1],singleDict[relation[0]],combiDict[i])
-                    print '\n'
- 
- 
-    def logSheet(self): #-------------- | FUNCTION 8 | --------------#
+    def logSheet(self): #-------------- | FUNCTION 8 | --------------# DONE BY LUCAS
         '''
         Furthering the use of our data, a logsheet would allow the merchants to see which cashier/waiter was working at what time.
         This would have anti-fraud and dispute handling applications as it would be clear if a cashier/waiter was making transactions when it was not their shift etc. 
@@ -691,11 +672,12 @@ class ApplicationMain(Frame):
             return False
  
  
-    def findMercAssoc(self): #-------------- | FUNCTION 7&8 | --------------#
+    def findMercAssoc(self): #-------------- | FUNCTION 7&8 | --------------# DONE BY DANIEL & LUCAS
         '''
         Combining our Function 7 together with an application to interpret the correlations,
         this function allows the user to select a merchant, after which they are able to select from two dropdown lists
-        which two products they would like to compare.
+        which two products they would like to compare. This function also does the calculations for association concepts
+        like Support and Confidence which are displayed after the user selects the 2 products to compare.
         - Daniel & Lucas
         '''
         if not sortedmerchantDict:
@@ -786,3 +768,4 @@ elif _platform == "win32":
  
 app.master.resizable(0,0)
 app.mainloop()
+
